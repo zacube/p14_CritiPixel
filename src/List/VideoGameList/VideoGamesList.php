@@ -23,7 +23,7 @@ use Traversable;
 final class VideoGamesList implements Countable, IteratorAggregate
 {
     private FormView $form;
-    
+
     private Filter $filter;
 
     /**
@@ -37,10 +37,11 @@ final class VideoGamesList implements Countable, IteratorAggregate
 
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
-        private FormFactoryInterface $formFactory,
-        private VideoGameRepository $videoGameRepository,
-        private Pagination  $pagination,
-    ) {
+        private FormFactoryInterface  $formFactory,
+        private VideoGameRepository   $videoGameRepository,
+        private Pagination            $pagination,
+    )
+    {
     }
 
     public function getForm(): FormView
@@ -48,7 +49,7 @@ final class VideoGamesList implements Countable, IteratorAggregate
         return $this->form;
     }
 
-      public function handleRequest(Request $request): self
+    public function handleRequest(Request $request): self
     {
         $this->filter = new Filter();
 
@@ -101,7 +102,7 @@ final class VideoGamesList implements Countable, IteratorAggregate
                 new Page(
                     $page,
                     $page === $this->pagination->getPage(),
-                    (string) $page,
+                    (string)$page,
                     $this->generateUrl($page)
                 )
             );
@@ -132,6 +133,14 @@ final class VideoGamesList implements Countable, IteratorAggregate
         return $this;
     }
 
+    public function generateUrl(int $page): string
+    {
+        return $this->urlGenerator->generate(
+            $this->route,
+            ['page' => $page] + $this->pagination->toArray() + $this->routeParameters
+        );
+    }
+
     public function getFilter(): Filter
     {
         return $this->filter;
@@ -142,21 +151,13 @@ final class VideoGamesList implements Countable, IteratorAggregate
         return $this->pagination;
     }
 
-    public function getIterator(): Traversable
-    {
-        return $this->data;
-    }
-
     public function count(): int
     {
         return count($this->data->getIterator());
     }
 
-    public function generateUrl(int $page): string
+    public function getIterator(): Traversable
     {
-        return $this->urlGenerator->generate(
-            $this->route,
-            ['page' => $page] + $this->pagination->toArray() + $this->routeParameters
-        );
+        return $this->data;
     }
 }
