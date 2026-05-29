@@ -23,8 +23,8 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($videoGames as $videoGame) {
 
-            // Nombre aléatoire de reviews entre 3 et 10
-            $numberOfReviews = rand(3, 10);
+            // Nombre aléatoire de reviews entre 1 et 5
+            $numberOfReviews = rand(1, 5);
 
             // mélange les users et en prend n au hasard (sans doublon)
             $selectedUsers = $users;
