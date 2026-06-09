@@ -35,19 +35,30 @@ final class VideoGameController extends AbstractController
     #[Route('{slug}', name: 'show', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function show(VideoGame $videoGame, EntityManagerInterface $entityManager, Request $request): Response
     {
+        //code ajouté : renvoie un code 401 Unauthorized
+        if ($request->isMethod('POST')) {
+            if (!$this->getUser()) {
+                throw new \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException('', 'Non autorisé');
+            }
+        }
+
         $review = new Review();
 
         $form = $this->createForm(ReviewType::class, $review)->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        //code ajouté
+        if ($request->isMethod('POST')) {
             $this->denyAccessUnlessGranted('review', $videoGame);
+        }
+        if ($form->isSubmitted() && $form->isValid()) {
+/*            $this->denyAccessUnlessGranted('review', $videoGame);*/
             $review->setVideoGame($videoGame);
             $review->setUser($this->getUser());
             $entityManager->persist($review);
             $entityManager->flush();
             return $this->redirectToRoute('video_games_show', ['slug' => $videoGame->getSlug()]);
         }
-
-        return $this->render('views/video_games/show.html.twig', ['video_game' => $videoGame, 'form' => $form]);
+        //code ajouté : renvoie un code 422 Unprocessable Entity si le formulaire est invalide
+        return $this->render('views/video_games/show.html.twig', ['video_game' => $videoGame, 'form' => $form], new Response(status: $form->isSubmitted() && !$form->isValid() ? 422 : 200));
     }
 }
