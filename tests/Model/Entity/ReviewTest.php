@@ -8,6 +8,9 @@ use Symfony\Component\Validator\Validation;
 
 class ReviewTest extends TestCase
 {
+    /**
+     * @return iterable<string, array<int>>
+     */
     public static function invalidRatingsProvider(): iterable
     {
         yield 'note trop basse' => [0];
@@ -17,7 +20,7 @@ class ReviewTest extends TestCase
     /**
      * @dataProvider invalidRatingsProvider
      */
-    public function testInvalidNotes(int $rating)
+    public function testInvalidNotes(int $rating): void
     {
         $validator = Validation::createValidatorBuilder()
             ->enableAttributeMapping() // pour lire #[Assert\...]
@@ -31,6 +34,9 @@ class ReviewTest extends TestCase
         $this->assertCount(1, $violations); // on attend 1 erreur de validation
     }
 
+    /**
+     * @return iterable<string, array<int, int>>
+     */
     public static function validRatingsProvider(): iterable
     {
         yield 'note ok1' => [1];
@@ -41,7 +47,7 @@ class ReviewTest extends TestCase
     /**
      * @dataProvider validRatingsProvider
      */
-    public function testValidNotes(int $rating)
+    public function testValidNotes(int $rating): void
     {
         $validator = Validation::createValidatorBuilder()
             ->enableAttributeMapping()

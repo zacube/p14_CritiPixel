@@ -27,7 +27,7 @@ class VideoGameControllerTest extends WebTestCase
 
     }
 
-    public function testResponseUserOk()
+    public function testResponseUserOk(): void
     {
         $this->client->loginUser($this->testUser);
 
@@ -35,11 +35,8 @@ class VideoGameControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function testPostReviewValidRating()
+    public function testPostReviewValidRating(): void
     {
-        // Vérifie que l'utilisateur existe
-        $this->assertNotNull($this->testUser, "Utilisateur test introuvable en base");
-
         $this->client->loginUser($this->testUser); //$testUser est authentifié
 
         $crawler = $this->client->request(Request::METHOD_GET, $this->url);
@@ -65,9 +62,8 @@ class VideoGameControllerTest extends WebTestCase
         $this->assertNotNull($review, "La review n'a pas été enregistrée en base");
     }
 
-    public function testPostReviewInvalidRating()
+    public function testPostReviewInvalidRating(): void
     {
-        $this->assertNotNull($this->testUser, "Utilisateur test introuvable en base");
         $this->client->loginUser($this->testUser);
 
         $crawler = $this->client->request(Request::METHOD_GET, $this->url);
@@ -83,7 +79,7 @@ class VideoGameControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(422);
     }
 
-    public function testNoFormIfNotAuthenticated()
+    public function testNoFormIfNotAuthenticated(): void
     {
         $this->client->request(Request::METHOD_GET, $this->url);
 
@@ -91,7 +87,7 @@ class VideoGameControllerTest extends WebTestCase
         $this->assertSelectorNotExists('form'); // le formulaire n'est pas affiché
     }
 
-    public function testPostReviewNotAuthenticated()
+    public function testPostReviewNotAuthenticated(): void
     {
         $this->client->request(Request::METHOD_POST, $this->url, [
             'review' => [

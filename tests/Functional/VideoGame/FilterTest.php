@@ -6,6 +6,7 @@ namespace App\Tests\Functional\VideoGame;
 
 use App\Model\Entity\Tag;
 use App\Tests\Functional\FunctionalTestCase;
+use Doctrine\ORM\EntityRepository;
 
 final class FilterTest extends FunctionalTestCase
 {
@@ -28,6 +29,9 @@ final class FilterTest extends FunctionalTestCase
         self::assertSelectorCount(1, 'article.game-card');
     }
 
+    /**
+     * @return array<string, array<string, mixed>>
+     */
     public static function tagProvider(): array
     {
         return [
@@ -48,11 +52,13 @@ final class FilterTest extends FunctionalTestCase
 
     /**
      * @dataProvider tagProvider
+     * @param array<int> $code
+     * @param array<string> $expected
      */
     public function testShouldFilterVideoGamesByValidTag(array $code, array $expected): void
     {
-        $tagRepository = $this->service('doctrine.orm.entity_manager')->getRepository(Tag::class);
-        /*$tagRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(Tag::class);*/
+        /** @var EntityRepository<Tag> $tagRepository */
+        $tagRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(Tag::class);
 
         $tags = [];
         foreach ($code as $item) {

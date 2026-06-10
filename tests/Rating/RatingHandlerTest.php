@@ -22,6 +22,9 @@ class RatingHandlerTest extends TestCase
         return $review;
     }
 
+    /**
+     * @return array<int, array<string, int>>
+     **/
     public static function averageProvider(): array
     {
         return [
@@ -38,6 +41,9 @@ class RatingHandlerTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<string, array<string, mixed>>
+     **/
     public static function ratingProvider(): array
     {
         return [
@@ -73,7 +79,7 @@ class RatingHandlerTest extends TestCase
     }
 
 
-    public function testAverageWithNoReview()
+    public function testAverageWithNoReview(): void
     // cas n°1 : le VideoGame n'a pas de Review
     {
         //On crée un nouveau VideoGame. Reviews est défini dans le constructeur de VideoGame
@@ -87,7 +93,7 @@ class RatingHandlerTest extends TestCase
     /**
      * @dataProvider averageProvider
      */
-    public function testAverageWithReviews(int $rating1, int $rating2, int $expected)
+    public function testAverageWithReviews(int $rating1, int $rating2, int $expected): void
     // cas n°2 : calcule une moyenne juste (2+4/2)
     // cas n°3 : calcule une moyenne avec arrondi (1+2/2)
     {
@@ -100,7 +106,7 @@ class RatingHandlerTest extends TestCase
     }
 
 
-    public function testCountRatingsWithNoReview()
+    public function testCountRatingsWithNoReview(): void
     {
         $vg = new VideoGame();
         $this->ratingHandler->countRatingsPerValue($vg);
@@ -114,8 +120,9 @@ class RatingHandlerTest extends TestCase
 
     /**
      * @dataProvider ratingProvider
+     * @param array<string, array<int>> $ratings
      */
-    public function testCountRatingsWithReviews(array $ratings, int $expected1, int $expected2, int $expected3, int $expected4, int $expected5)
+    public function testCountRatingsWithReviews(array $ratings, int $expected1, int $expected2, int $expected3, int $expected4, int $expected5): void
     {
         $vg = new VideoGame();
         foreach ($ratings as $rating) {
