@@ -9,10 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class VideoGameControllerTest extends WebTestCase
 {
-    private KernelBrowser|null $client = null;
+    private ?KernelBrowser $client = null;
     private string $url;
     private User $testUser;
 
@@ -24,7 +23,6 @@ class VideoGameControllerTest extends WebTestCase
 
         $router = static::getContainer()->get('router');
         $this->url = $router->generate('video_games_show', ['slug' => 'jeu-video-0']);
-
     }
 
     public function testResponseUserOk(): void
@@ -37,7 +35,7 @@ class VideoGameControllerTest extends WebTestCase
 
     public function testPostReviewValidRating(): void
     {
-        $this->client->loginUser($this->testUser); //$testUser est authentifié
+        $this->client->loginUser($this->testUser); // $testUser est authentifié
 
         $crawler = $this->client->request(Request::METHOD_GET, $this->url);
 
@@ -49,12 +47,12 @@ class VideoGameControllerTest extends WebTestCase
         $form['review[comment]'] = 'blabla';
         $this->client->submit($form);
 
-        $this->assertResponseRedirects(); //vérifie la redirection 302
+        $this->assertResponseRedirects(); // vérifie la redirection 302
         $this->client->followRedirect();
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorNotExists('form'); // le formulaire n'est plus affiché, donc Ok
-        $this->assertSelectorTextContains('.rating-5', '5 Note'); //vérifie l'affichage de la note
+        $this->assertSelectorTextContains('.rating-5', '5 Note'); // vérifie l'affichage de la note
 
         // Vérification que l'insertion en base est correcte
         $reviewRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(Review::class);
@@ -92,14 +90,10 @@ class VideoGameControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_POST, $this->url, [
             'review' => [
                 'rating' => 5,
-                'comment' => 'blabla'
-            ]
+                'comment' => 'blabla',
+            ],
         ]);
 
         $this->assertResponseStatusCodeSame(401);
     }
-
-
 }
-
-

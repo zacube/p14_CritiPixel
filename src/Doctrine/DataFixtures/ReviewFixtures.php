@@ -14,7 +14,8 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         private readonly Generator $faker,
-    ) {}
+    ) {
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -22,7 +23,6 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
         $videoGames = $manager->getRepository(VideoGame::class)->findAll();
 
         foreach ($videoGames as $videoGame) {
-
             // Nombre aléatoire de reviews entre 1 et 5
             $numberOfReviews = rand(1, 5);
 

@@ -2,9 +2,7 @@
 
 namespace App\Doctrine\DataFixtures;
 
-use App\Model\Entity\Review;
 use App\Model\Entity\Tag;
-use App\Model\Entity\User;
 use App\Model\Entity\VideoGame;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -15,15 +13,14 @@ class TagFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         private readonly Generator $faker,
-    )
-    {
+    ) {
     }
 
     public function load(ObjectManager $manager): void
     {
         // Crée 10 tags
-        $tags = array_fill_callback(0, 10, fn (int $index): Tag => (new Tag)
-            ->setCode(($index) + 1)
+        $tags = array_fill_callback(0, 10, fn (int $index): Tag => (new Tag())
+            ->setCode($index + 1)
             ->setName($this->faker->word())
         );
         array_walk($tags, [$manager, 'persist']);
@@ -43,7 +40,7 @@ class TagFixtures extends Fixture implements DependentFixtureInterface
                 continue;
             }
             $numberOfTags = rand(1, 3);
-            $selectedTags = array_slice($tags, 3); //retire les 3 premiers tags utilisés pour le test
+            $selectedTags = array_slice($tags, 3); // retire les 3 premiers tags utilisés pour le test
             shuffle($selectedTags);
             $selectedTags = array_slice($selectedTags, 0, $numberOfTags);
             foreach ($selectedTags as $tag) {

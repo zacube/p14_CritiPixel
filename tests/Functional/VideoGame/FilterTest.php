@@ -46,13 +46,14 @@ final class FilterTest extends FunctionalTestCase
             'cas n°3' => [
                 'code' => [3],
                 'videogames' => ['Jeu vidéo 10', 'Jeu vidéo 11'],
-            ]
+            ],
         ];
     }
 
     /**
      * @dataProvider tagProvider
-     * @param array<int> $code
+     *
+     * @param array<int>    $code
      * @param array<string> $expected
      */
     public function testShouldFilterVideoGamesByValidTag(array $code, array $expected): void
@@ -63,7 +64,7 @@ final class FilterTest extends FunctionalTestCase
         $tags = [];
         foreach ($code as $item) {
             $tag = $tagRepository->findOneBy(['code' => $item]);
-            if ($tag !== null) {
+            if (null !== $tag) {
                 $tags[] = $tag->getId();
             }
         }

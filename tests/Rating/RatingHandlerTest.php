@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Tests\Rating;
+
 use App\Model\Entity\Review;
 use App\Model\Entity\VideoGame;
-use App\Model\Entity\NumberOfRatingPerValue;
 use App\Rating\RatingHandler;
 use PHPUnit\Framework\TestCase;
+
 class RatingHandlerTest extends TestCase
 {
     private RatingHandler $ratingHandler;
@@ -19,6 +21,7 @@ class RatingHandlerTest extends TestCase
     {
         $review = new Review();
         $review->setRating($rating);
+
         return $review;
     }
 
@@ -31,13 +34,13 @@ class RatingHandlerTest extends TestCase
             [
                 'rating1' => 2,
                 'rating2' => 4,
-                'expected' => 3
+                'expected' => 3,
             ],
             [
                 'rating1' => 1,
                 'rating2' => 2,
-                'expected' => 2
-            ]
+                'expected' => 2,
+            ],
         ];
     }
 
@@ -53,7 +56,7 @@ class RatingHandlerTest extends TestCase
                     'rating2' => [2, 2],
                     'rating3' => [3, 0],
                     'rating4' => [4, 0],
-                    'rating5' => [5, 1]
+                    'rating5' => [5, 1],
                 ],
                 'expected1' => 4,
                 'expected2' => 2,
@@ -67,7 +70,7 @@ class RatingHandlerTest extends TestCase
                     'rating2' => [2, 2],
                     'rating3' => [3, 2],
                     'rating4' => [4, 1],
-                    'rating5' => [5, 1]
+                    'rating5' => [5, 1],
                 ],
                 'expected1' => 5,
                 'expected2' => 2,
@@ -75,18 +78,17 @@ class RatingHandlerTest extends TestCase
                 'expected4' => 1,
                 'expected5' => 1,
             ],
-            ];
+        ];
     }
-
 
     public function testAverageWithNoReview(): void
     // cas n°1 : le VideoGame n'a pas de Review
     {
-        //On crée un nouveau VideoGame. Reviews est défini dans le constructeur de VideoGame
-        $vg= new Videogame;
-        //On appelle la méthode
+        // On crée un nouveau VideoGame. Reviews est défini dans le constructeur de VideoGame
+        $vg = new VideoGame();
+        // On appelle la méthode
         $this->ratingHandler->calculateAverage($vg);
-        //On vérifie que la méthode getAverageRating renvoie bien null
+        // On vérifie que la méthode getAverageRating renvoie bien null
         $this->assertSame(null, $vg->getAverageRating());
     }
 
@@ -101,10 +103,9 @@ class RatingHandlerTest extends TestCase
         $vg->getReviews()->add($this->createReview($rating1));
         $vg->getReviews()->add($this->createReview($rating2));
         $this->ratingHandler->calculateAverage($vg);
-        //On vérifie que la méthode getAverageRating renvoie bien la valeur attendue
+        // On vérifie que la méthode getAverageRating renvoie bien la valeur attendue
         $this->assertSame($expected, $vg->getAverageRating());
     }
-
 
     public function testCountRatingsWithNoReview(): void
     {
@@ -120,13 +121,14 @@ class RatingHandlerTest extends TestCase
 
     /**
      * @dataProvider ratingProvider
+     *
      * @param array<string, array<int>> $ratings
      */
     public function testCountRatingsWithReviews(array $ratings, int $expected1, int $expected2, int $expected3, int $expected4, int $expected5): void
     {
         $vg = new VideoGame();
         foreach ($ratings as $rating) {
-            for ($i = 0; $i < $rating[1]; $i++) {
+            for ($i = 0; $i < $rating[1]; ++$i) {
                 $vg->getReviews()->add($this->createReview($rating[0]));
             }
         }
@@ -140,10 +142,3 @@ class RatingHandlerTest extends TestCase
         $this->assertSame($expected5, $vg->getNumberOfRatingsPerValue()->getNumberOfFive());
     }
 }
-
-
-
-
-
-
-

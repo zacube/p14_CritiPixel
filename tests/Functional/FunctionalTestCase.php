@@ -27,9 +27,11 @@ abstract class FunctionalTestCase extends WebTestCase
 
     /**
      * @template T of object
+     *
      * @param class-string<T> $id
+     *
      * @return T
- */
+     */
     protected function service(string $id): object
     {
         return $this->client->getContainer()->get($id);
