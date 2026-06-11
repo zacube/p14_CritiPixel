@@ -20,8 +20,7 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $users = $manager->getRepository(User::class)->findAll();
-        $videoGames = $manager->getRepository(VideoGame::class)->findAll();
-
+        $videoGames = $manager->getRepository(VideoGame::class)->findBy([], ['id' => 'ASC']);
         foreach ($videoGames as $videoGame) {
             // Nombre aléatoire de reviews entre 1 et 5
             $numberOfReviews = rand(1, 5);
