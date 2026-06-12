@@ -19,7 +19,7 @@ class VideoGameControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $userRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(User::class);
-        $this->testUser = $userRepository->findOneByEmail('user+0@email.com');
+        $this->testUser = $userRepository->findOneBy(['email' => 'user+0@email.com']);
 
         $router = static::getContainer()->get('router');
         $this->url = $router->generate('video_games_show', ['slug' => 'jeu-video-0']);
@@ -37,12 +37,12 @@ class VideoGameControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->testUser); // $testUser est authentifié
 
-        $crawler = $this->client->request(Request::METHOD_GET, $this->url);
+        $crawler = $this->client->request(Request::METHOD_GET, $this->url); // on demande la page
 
-        $this->assertResponseIsSuccessful(); // page affichée
-        $this->assertSelectorExists('form'); // vérifie la présence du formulaire
+        $this->assertResponseIsSuccessful(); // la page est affichée.
+        $this->assertSelectorExists('form'); // on vérifie la présence du formulaire
 
-        $form = $crawler->selectButton('Poster')->form();
+        $form = $crawler->selectButton('Poster')->form(); // cherche la présence du bouton "Poster"
         $form['review[rating]'] = '5';
         $form['review[comment]'] = 'blabla';
         $this->client->submit($form);
@@ -69,12 +69,12 @@ class VideoGameControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Poster')->form();
-        $form->disableValidation();
+        $form->disableValidation(); // désactive la validation du formulaire côté client
         $form['review[rating]'] = '0';
         $form['review[comment]'] = 'blabla';
         $this->client->submit($form);
 
-        $this->assertResponseStatusCodeSame(422);
+        $this->assertResponseStatusCodeSame(422); // -> renvoie le code 422 Unprocessable Content
     }
 
     public function testNoFormIfNotAuthenticated(): void
@@ -94,6 +94,6 @@ class VideoGameControllerTest extends WebTestCase
             ],
         ]);
 
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseStatusCodeSame(401); // -> renvoie le code 401 Unauthorized
     }
 }
