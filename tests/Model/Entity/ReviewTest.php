@@ -6,6 +6,7 @@ use App\Model\Entity\Review;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 
+// test unitaire dédié à la vérification du comportement de l'ajout d'une note à une Review
 class ReviewTest extends TestCase
 {
     /**
@@ -30,7 +31,6 @@ class ReviewTest extends TestCase
         $review->setRating($rating);
 
         $violations = $validator->validate($review);
-
         $this->assertCount(1, $violations); // on attend 1 erreur de validation
     }
 
@@ -57,7 +57,6 @@ class ReviewTest extends TestCase
         $review->setRating($rating);
 
         $violations = $validator->validate($review);
-
-        $this->assertCount(0, $violations); // on n'attend pas d'erreur de validation
+        $this->assertCount(0, $violations); // on n'attend aucune erreur de validation
     }
 }

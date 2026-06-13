@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Range;
 
 #[Entity]
@@ -33,6 +34,10 @@ class Review
     #[Column]
     private int $rating;
 
+    // Contrainte ajoutée pour tester la limitation du nb de caractères
+    #[Length(
+        max: 50,
+        maxMessage: 'Your comment cannot be longer than {{ limit }} characters')]
     #[Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 

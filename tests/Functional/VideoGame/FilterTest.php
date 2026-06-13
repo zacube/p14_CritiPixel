@@ -8,6 +8,7 @@ use App\Model\Entity\Tag;
 use App\Tests\Functional\FunctionalTestCase;
 use Doctrine\ORM\EntityRepository;
 
+// vérifier le filtrage des jeux vidéo par tags
 final class FilterTest extends FunctionalTestCase
 {
     public function testShouldListTenVideoGames(): void
@@ -34,6 +35,7 @@ final class FilterTest extends FunctionalTestCase
      */
     public static function tagProvider(): array
     {
+        // code = code du tag qui est associé à un VideoGame spécifiquement pour le test
         return [
             'cas n°1' => [
                 'code' => [1],
@@ -70,7 +72,7 @@ final class FilterTest extends FunctionalTestCase
         }
 
         $router = static::getContainer()->get('router');
-        $url = $router->generate('video_games_list', ['filter' => ['tags' => $tags]]);  // tableau d'ids
+        $url = $router->generate('video_games_list', ['filter' => ['tags' => $tags]]);  // génère l'url en fonction de l'id des tags
         $this->get($url);
         self::assertResponseIsSuccessful();
 

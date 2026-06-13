@@ -77,6 +77,23 @@ class VideoGameControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(422); // -> renvoie le code 422 Unprocessable Content
     }
 
+    public function testPostReviewInvalidComment(): void
+    {
+        $this->client->loginUser($this->testUser);
+
+        $crawler = $this->client->request(Request::METHOD_GET, $this->url);
+
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('Poster')->form();
+        $form->disableValidation(); // désactive la validation du formulaire côté client
+        $form['review[rating]'] = '5';
+        $form['review[comment]'] = 'Un commentaire de plus de 50 caractères est refusé.';
+        $this->client->submit($form);
+
+        $this->assertResponseStatusCodeSame(422); // -> renvoie le code 422 Unprocessable Content
+    }
+
     public function testNoFormIfNotAuthenticated(): void
     {
         $this->client->request(Request::METHOD_GET, $this->url);
