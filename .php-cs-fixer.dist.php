@@ -1,7 +1,7 @@
 <?php
 
 $finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__)
+    ->in(__DIR__ . '/tests')
     ->exclude('var')
     ->notPath([
         'config/bundles.php',
