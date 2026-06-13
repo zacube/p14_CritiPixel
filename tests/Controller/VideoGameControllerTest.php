@@ -52,7 +52,7 @@ class VideoGameControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorNotExists('form'); // le formulaire n'est plus affiché, donc Ok
-        $this->assertSelectorTextContains('.rating-5', '5 Note'); // vérifie l'affichage de la note
+        $this->assertSelectorTextContains('#pane-reviews .rating-5', '5 Note'); // vérifie l'affichage de la note
 
         // Vérification que l'insertion en base est correcte
         $reviewRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(Review::class);
@@ -74,7 +74,24 @@ class VideoGameControllerTest extends WebTestCase
         $form['review[comment]'] = 'blabla';
         $this->client->submit($form);
 
-        $this->assertResponseStatusCodeSame(422); // -> renvoie le code 422 Unprocessable Content
+        $this->assertResponseStatusCodeSame(422); // → renvoie le code 422 Unprocessable Content
+    }
+
+    public function testPostReviewInvalidComment(): void
+    {
+        $this->client->loginUser($this->testUser);
+
+        $crawler = $this->client->request(Request::METHOD_GET, $this->url);
+
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('Poster')->form();
+        $form->disableValidation(); // désactive la validation du formulaire côté client
+        $form['review[rating]'] = '5';
+        $form['review[comment]'] = 'Un commentaire de plus de 50 caractères est refusé.';
+        $this->client->submit($form);
+
+        $this->assertResponseStatusCodeSame(422); // → renvoie le code 422 Unprocessable Content
     }
 
     public function testPostReviewInvalidComment(): void
