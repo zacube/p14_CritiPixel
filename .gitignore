@@ -29,3 +29,12 @@ phpstan.neon
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
+
+
+# IDE
+/.idea/
+
+# Test coverage / résultats générés
+/public/resultTest.html
+/public/resultTest.htmlcls
+/public/test-coverage/
