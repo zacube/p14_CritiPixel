@@ -26,7 +26,7 @@ class TagFixtures extends Fixture implements DependentFixtureInterface
         array_walk($tags, [$manager, 'persist']);
 
         $videoGames = $manager->getRepository(VideoGame::class)->findBy([], ['id' => 'ASC']);
-        // Associations déterministes pour les tests
+        // Associations déterminées pour les tests
         $videoGames[0]->addTag($tags[0])->addTag($tags[1]);
         $videoGames[1]->addTag($tags[0])->addTag($tags[1]);
         $videoGames[2]->addTag($tags[0]);
