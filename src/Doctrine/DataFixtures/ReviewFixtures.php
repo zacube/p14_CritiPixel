@@ -14,15 +14,23 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         private readonly Generator $faker,
-    ) {}
+    ) {
+    }
 
     public function load(ObjectManager $manager): void
     {
-        $users = $manager->getRepository(User::class)->findAll();
-        $videoGames = $manager->getRepository(VideoGame::class)->findAll();
+        // charge tous les utilisateurs sauf user+0
+        // le user+0 étant utilisé pour les tests, il ne doit pas être associé à une Review
+        $users = $manager->getRepository(User::class)->createQueryBuilder('u')
+            ->andWhere('u.username != :excluded')
+            ->setParameter('excluded', 'user+0')
+            ->orderBy('u.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $videoGames = $manager->getRepository(VideoGame::class)->findBy([], ['id' => 'ASC']);
 
         foreach ($videoGames as $videoGame) {
-
             // Nombre aléatoire de reviews entre 1 et 5
             $numberOfReviews = rand(1, 5);
 

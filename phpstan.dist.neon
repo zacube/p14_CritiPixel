@@ -1,0 +1,7 @@
+parameters:
+    level: 6
+    paths:
+        - tests/
+    ignoreErrors:
+        - path: 'tests/bootstrap.php'
+          message: '#will always evaluate to true#'
